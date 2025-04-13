@@ -1,11 +1,19 @@
-import geoip2.database, json
+import geoip2.database, json, os
+
+# We expect a directory named "sources/GeoLite2/" which should contain the following Maxmind databases:
+#   - GeoLite2-City.mmdb
+#   - GeoLite2-ASN.mmdb
+#
+# This can be overwritten
+
+mmdb_path = f"sources{os.sep}GeoLite2"
 
 def __maxmind_geo(ip):
-    reader = geoip2.database.Reader('sources/GeoLite2/GeoLite2-City.mmdb', locales="[en]")
+    reader = geoip2.database.Reader(f'{mmdb_path}{os.sep}GeoLite2-City.mmdb', locales="[en]")
     return reader.city(ip).to_dict()
 
 def __maxmind_asn(ip):
-    reader = geoip2.database.Reader('sources/GeoLite2/GeoLite2-ASN.mmdb')
+    reader = geoip2.database.Reader(f'{mmdb_path}{os.sep}GeoLite2-ASN.mmdb')
     return reader.asn(ip).to_dict()
 
 def geolookup(ip):
